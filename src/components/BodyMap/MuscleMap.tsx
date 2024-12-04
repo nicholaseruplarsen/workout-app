@@ -1,39 +1,31 @@
-// src/components/MuscleSvg.tsx
+// src/components/BodyMap/MuscleMap.tsx
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { getActivationColor } from '@/utils/muscleActivations';
 
-interface MuscleSvgProps {
-  className?: string;
+interface MuscleMapProps {
   svgContent: string;
   muscleActivations: Record<string, number>;
-  onReady?: () => void;
 }
 
-export const MuscleSvg = ({ 
-  className = '', 
-  svgContent, 
-  muscleActivations,
-  onReady 
-}: MuscleSvgProps) => {
+export function MuscleMap({ svgContent, muscleActivations }: MuscleMapProps) {
   const svgRef = useRef<HTMLDivElement>(null);
-  const [processedSvg, setProcessedSvg] = useState<string>('');
+  const [isReady, setIsReady] = useState(false);
+  const [processedSvg, setProcessedSvg] = useState('');
 
   useEffect(() => {
     if (!svgContent) return;
 
-    // Create a temporary DOM element to process the SVG
     const temp = document.createElement('div');
     temp.innerHTML = svgContent;
     const svgElement = temp.querySelector('svg');
     
     if (svgElement) {
-      // Set dimensions
       svgElement.setAttribute('height', '650');
       const width = (900 * 676.49) / 1203.49;
       svgElement.setAttribute('width', width.toString());
       
-      // Apply colors to muscle groups
       Object.entries(muscleActivations).forEach(([muscleId, activation]) => {
         const group = svgElement.getElementById(muscleId);
         if (group) {
@@ -46,7 +38,6 @@ export const MuscleSvg = ({
         }
       });
 
-      // Store the processed SVG
       setProcessedSvg(temp.innerHTML);
     }
   }, [svgContent, muscleActivations]);
@@ -56,7 +47,6 @@ export const MuscleSvg = ({
 
     const svgElement = svgRef.current.querySelector('svg');
     if (svgElement) {
-      // Add interactivity to muscle groups
       const muscleGroups = svgElement.querySelectorAll('g[id]');
       muscleGroups.forEach((group) => {
         group.addEventListener('mouseenter', (e) => {
@@ -90,26 +80,15 @@ export const MuscleSvg = ({
         });
       });
 
-      // Signal that the SVG is ready
-      requestAnimationFrame(() => {
-        onReady?.();
-      });
+      setIsReady(true);
     }
-  }, [processedSvg, muscleActivations, onReady]);
-
-  const getActivationColor = (activation: number) => {
-    if (activation >= 80) return '#FF1A1A';
-    if (activation >= 60) return '#FF4D4D';
-    if (activation >= 40) return '#FF8080';
-    if (activation >= 20) return '#FFB3B3';
-    return '#FFE5E5';
-  };
+  }, [processedSvg, muscleActivations]);
 
   return (
     <div 
-      ref={svgRef} 
-      className={className}
-      dangerouslySetInnerHTML={{ __html: processedSvg }} 
+      ref={svgRef}
+      className={`bodymap-container ${isReady ? 'ready' : ''}`}
+      dangerouslySetInnerHTML={{ __html: processedSvg }}
     />
   );
-};
+}
