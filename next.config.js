@@ -5,6 +5,16 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/workout-app',
+        basePath: false,
+        permanent: true
+      }
+    ];
+  },
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
