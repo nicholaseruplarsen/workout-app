@@ -1,10 +1,15 @@
 // src/types/exercise.ts
+import type { Category, Difficulty, Equipment } from '@/lib/constants';
+
 export interface Exercise {
   id: string;
   name: string;
+  category: Category;
   muscleActivations: Record<string, number>;
-  instructions?: string[];
-  equipment?: string[];
+  instructions: string[];
+  equipment?: Equipment[];
+  difficulty: Difficulty;
+  tags?: string[];
 }
 
 export interface SavedExercise extends Exercise {

@@ -1,0 +1,21 @@
+{
+  "bicep-curls": {
+    "id": "bicep-curls",
+    "name": "Bicep Curls",
+    "category": "arms",
+    "equipment": ["dumbbells", "barbell", "cable"],
+    "muscleActivations": {
+      "long-head-bicep": 90,
+      "short-head-bicep": 85,
+      "wrist-flexors": 30
+    },
+    "instructions": [
+      "Stand with feet shoulder-width apart",
+      "Hold dumbbells at your sides",
+      "Curl weights up while keeping elbows still",
+      "Lower weights back down slowly"
+    ],
+    "difficulty": "beginner",
+    "tags": ["isolation", "strength"]
+  }
+}
