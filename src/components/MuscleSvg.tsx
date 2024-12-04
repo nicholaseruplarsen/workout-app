@@ -3,13 +3,13 @@
 
 import { useEffect, useRef } from 'react';
 
-// MuscleSvg.tsx
 interface MuscleSvgProps {
   className?: string;
   svgContent: string;
+  muscleActivations: Record<string, number>;
 }
 
-export const MuscleSvg = ({ className = '', svgContent }: MuscleSvgProps) => {
+export const MuscleSvg = ({ className = '', svgContent, muscleActivations }: MuscleSvgProps) => {
   const svgRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -25,11 +25,19 @@ export const MuscleSvg = ({ className = '', svgContent }: MuscleSvgProps) => {
         const muscleGroups = svgElement.querySelectorAll('g[id]');
         muscleGroups.forEach((group) => {
           group.addEventListener('mouseenter', (e) => {
+            const muscleId = group.id;
+            const activation = muscleActivations[muscleId] || 0;
+
             const tooltip = document.createElement('div');
             tooltip.className = 'muscle-tooltip';
-            tooltip.textContent = group.id
-              .replace(/-/g, ' ')
-              .replace(/\b\w/g, l => l.toUpperCase());
+            tooltip.innerHTML = `
+              <div class="font-semibold">
+                ${muscleId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+              </div>
+              <div class="text-sm opacity-80">
+                Activation: ${Math.round(activation)}%
+              </div>
+            `;
             document.body.appendChild(tooltip);
 
             const updateTooltipPosition = (e: MouseEvent) => {
@@ -48,7 +56,7 @@ export const MuscleSvg = ({ className = '', svgContent }: MuscleSvgProps) => {
         });
       }
     }
-  }, []);
+  }, [muscleActivations]);
 
   return (
     <div 

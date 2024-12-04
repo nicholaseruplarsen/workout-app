@@ -17,40 +17,43 @@ interface BodyMapProps {
   svgContent: string;
 }
 
-// BodyMap.tsx
 export default function BodyMap({ svgContent }: BodyMapProps) {
+  const [muscleActivations, setMuscleActivations] = useState<Record<string, number>>({});
+
   useEffect(() => {
-    // Debug: Log all group IDs to see what we're working with
-    const svg = document.querySelector('svg');
-    if (svg) {
-      const groups = svg.querySelectorAll('g[id]');
-      console.log('Available muscle groups:', Array.from(groups).map(g => g.id));
-    }
+    // Initialize random activations
+    const initialActivations = muscleGroups.reduce((acc, muscle) => {
+      acc[muscle] = Math.floor(Math.random() * 100);
+      return acc;
+    }, {} as Record<string, number>);
+    setMuscleActivations(initialActivations);
   }, []);
+
+  const getActivationColor = (activation: number) => {
+    if (activation >= 80) return '#FF1A1A';
+    if (activation >= 60) return '#FF4D4D';
+    if (activation >= 40) return '#FF8080';
+    if (activation >= 20) return '#FFB3B3';
+    return '#FFE5E5';
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen w-full">
       <style jsx global>{`
-        /* Base styles for all paths */
         .bodymap path { 
           transition: all 0.2s ease-in-out;
         }
         
-        /* Style for paths that should be filled */
         .bodymap g[id] path:not([fill="none"]) { 
           fill: #EBEBEB;
         }
 
-        /* Hover styles */
         ${muscleGroups.map(muscle => `
           .bodymap #${muscle} {
             cursor: pointer;
           }
-          .bodymap #${muscle}:hover path:not([fill="none"]) {
-            fill: #FF1A1A !important;
-          }
-          .bodymap #${muscle}:hover path[fill="none"] {
-            stroke: #CC0000;
+          .bodymap #${muscle} path:not([fill="none"]) {
+            fill: ${muscleActivations[muscle] ? getActivationColor(muscleActivations[muscle]) : '#EBEBEB'};
           }
         `).join('\n')}
 
@@ -58,12 +61,12 @@ export default function BodyMap({ svgContent }: BodyMapProps) {
           position: absolute;
           background-color: rgba(0, 0, 0, 0.8);
           color: white;
-          padding: 4px 8px;
-          border-radius: 4px;
+          padding: 8px 12px;
+          border-radius: 6px;
           font-size: 14px;
           pointer-events: none;
           transform: translate(-50%, -100%);
-          margin-top: -8px;
+          margin-top: -12px;
           z-index: 1000;
         }
       `}</style>
@@ -71,6 +74,7 @@ export default function BodyMap({ svgContent }: BodyMapProps) {
         <MuscleSvg 
           className="w-full h-auto preserve-aspect-ratio bodymap"
           svgContent={svgContent}
+          muscleActivations={muscleActivations}
         />
       </div>
     </div>
