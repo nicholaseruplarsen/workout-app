@@ -21,11 +21,12 @@ export function calculateMuscleActivations(exercises: SavedExercise[]) {
   const activations = initializeMuscleActivations();
 
   exercises.forEach(exercise => {
-    (Object.entries(exercise.muscleActivations) as [string, number][]).forEach(([muscle, activation]) => {
-      activations[muscle] = Math.max(
-        activations[muscle] || 0,
-        activation
-      );
+    Object.entries(exercise.muscleActivations).forEach(([muscle, activation]) => {
+      // Add the activation values together instead of taking the maximum
+      activations[muscle] = (activations[muscle] || 0) + activation;
+      
+      // Cap the maximum activation at 100%
+      activations[muscle] = Math.min(activations[muscle], 100);
     });
   });
 
