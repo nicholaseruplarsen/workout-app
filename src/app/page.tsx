@@ -1,11 +1,13 @@
+// src/app/page.tsx
+import { getSvgContent } from '@/lib/svg';
 import BodyMap from '@/components/BodyMap';
 
-export default function Home() {
+export default async function Home() {
+  const svgContent = await getSvgContent();
+
   return (
-    <main className="min-h-screen p-8">
-      <h1 className="text-3xl font-bold text-center mb-8">
-      </h1>
-      <BodyMap />
+    <main className="min-h-screen">
+      <BodyMap svgContent={svgContent} />
     </main>
   );
 }
