@@ -31,15 +31,29 @@ export default function BodyMap({ svgContent }: BodyMapProps) {
   }, []);
 
   const getActivationColor = (activation: number) => {
-    if (activation >= 80) return '#FF1A1A';
-    if (activation >= 60) return '#FF4D4D';
-    if (activation >= 40) return '#FF8080';
-    if (activation >= 20) return '#FFB3B3';
-    return '#FFE5E5';
+    // Convert activation to decimal (0-1)
+    const t = activation / 100;
+    
+    // Start color (light pink/white) - rgb(255, 229, 229)
+    const r1 = 255;
+    const g1 = 229;
+    const b1 = 229;
+    
+    // End color (bright red) - rgb(255, 36, 0)
+    const r2 = 255;
+    const g2 = 36;
+    const b2 = 0;
+    
+    // Linear interpolation between the two colors
+    const r = Math.round(r1 + (r2 - r1) * t);
+    const g = Math.round(g1 + (g2 - g1) * t);
+    const b = Math.round(b1 + (b2 - b1) * t);
+    
+    return `rgb(${r}, ${g}, ${b})`;
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen w-full">
+    <div className="flex items-center justify-center min-h-screen">
       <style jsx global>{`
         .bodymap-container {
           visibility: hidden;
@@ -85,9 +99,9 @@ export default function BodyMap({ svgContent }: BodyMapProps) {
           z-index: 1000;
         }
       `}</style>
-      <div className={`w-full max-w-2xl bodymap-container ${isReady ? 'ready' : ''}`}>
+      <div className={`bodymap-container ${isReady ? 'ready' : ''}`}>
         <MuscleSvg 
-          className="w-full h-auto preserve-aspect-ratio bodymap"
+          className="w-auto h-auto preserve-aspect-ratio bodymap"
           svgContent={svgContent}
           muscleActivations={muscleActivations}
           onReady={() => setIsReady(true)}
