@@ -15,15 +15,9 @@ interface BodyMapProps {
 }
 
 export default function BodyMap({ svgContent }: BodyMapProps) {
-  const [canOpenSearch, setCanOpenSearch] = useState(true);
-  const { 
-    savedExercises, 
-    addExercise, 
-    toggleExercise, 
-    removeExercise 
-  } = useExercises();
-  
+  const { savedExercises, addExercise, removeExercise } = useExercises();
   const muscleActivations = useMuscleActivations(savedExercises);
+  const [canOpenSearch, setCanOpenSearch] = useState(true);
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {

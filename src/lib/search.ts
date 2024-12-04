@@ -1,7 +1,6 @@
 // src/lib/search.ts
 import { Exercise } from '@/types/exercise';
 import { Category, Difficulty, Equipment } from '@/lib/constants';
-import { findExercise } from '@/lib/exercises';
 import { exerciseDatabase } from '@/data/exercises';
 
 interface SearchFilters {

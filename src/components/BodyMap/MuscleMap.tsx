@@ -3,10 +3,11 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { getActivationColor } from '@/utils/muscleActivations';
+import { MuscleActivation } from '@/types/exercise';
 
 interface MuscleMapProps {
   svgContent: string;
-  muscleActivations: Record<string, number>;
+  muscleActivations: Record<string, MuscleActivation>;
 }
 
 export function MuscleMap({ svgContent, muscleActivations }: MuscleMapProps) {
@@ -27,23 +28,29 @@ export function MuscleMap({ svgContent, muscleActivations }: MuscleMapProps) {
     const width = (900 * 676.49) / 1203.49;
     svgElement.setAttribute('width', width.toString());
     
+    // Inside useEffect
     Object.entries(muscleActivations).forEach(([muscleId, activation]) => {
       const group = svgElement.getElementById(muscleId);
       if (group) {
         const paths = group.getElementsByTagName('path');
         Array.from(paths).forEach(path => {
           if (path.getAttribute('fill') !== 'none') {
-            path.setAttribute('fill', getActivationColor(activation));
+            path.setAttribute('fill', getActivationColor(activation.value));
+            if (activation.isOverloaded) {
+              path.classList.add('muscle-overloaded');
+            } else {
+              path.classList.remove('muscle-overloaded');
+            }
           }
         });
       }
     });
-
-    const createTooltip = (muscleId: string, activation: number, x: number, y: number) => {
+    
+    const createTooltip = (muscleId: string, activation: MuscleActivation, x: number, y: number) => {
       if (tooltipRef.current) {
         tooltipRef.current.remove();
       }
-
+    
       const tooltip = document.createElement('div');
       tooltip.className = 'muscle-tooltip';
       tooltip.innerHTML = `
@@ -51,7 +58,7 @@ export function MuscleMap({ svgContent, muscleActivations }: MuscleMapProps) {
           ${muscleId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
         </div>
         <div class="text-sm opacity-80">
-          Activation: ${Math.round(activation)}%
+          Activation: ${activation.isOverloaded ? `+${activation.value}` : activation.value}%
         </div>
       `;
       
@@ -74,12 +81,12 @@ export function MuscleMap({ svgContent, muscleActivations }: MuscleMapProps) {
       group.addEventListener('mousemove', (e: Event) => {
         const mouseEvent = e as MouseEvent;
         const muscleId = group.id;
-        const activation = muscleActivations[muscleId] || 0;
+        const activation = muscleActivations[muscleId] || { value: 0, isOverloaded: false };
         createTooltip(muscleId, activation, mouseEvent.clientX + 10, mouseEvent.clientY - 10);
       });
 
       // Fix the mouseleave event type
-      group.addEventListener('mouseleave', (_e: Event) => {
+      group.addEventListener('mouseleave', () => {
         if (tooltipRef.current) {
           tooltipRef.current.remove();
           tooltipRef.current = null;

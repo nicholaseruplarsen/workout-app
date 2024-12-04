@@ -36,5 +36,44 @@
     ],
     "difficulty": "beginner",
     "tags": ["isolation", "bodyweight"]
+  },
+  "hanging-leg-raises": {
+    "id": "hanging-leg-raises",
+    "name": "Hanging Leg Raises",
+    "category": "core",
+    "equipment": ["bodyweight"],
+    "muscleActivations": {
+      "lower-abdominals": 95,
+      "upper-abdominals": 80,
+      "obliques": 50,
+      "hip-flexors": 70
+    },
+    "instructions": [
+      "Hang from pull-up bar with straight arms",
+      "Keep legs straight throughout movement",
+      "Raise legs until parallel to ground",
+      "Lower with control to starting position"
+    ],
+    "difficulty": "advanced",
+    "tags": ["isolation", "lower abs", "anti-extension"]
+  },
+  "pallof-press": {
+    "id": "pallof-press",
+    "name": "Pallof Press",
+    "category": "core",
+    "equipment": ["cable"],
+    "muscleActivations": {
+      "obliques": 90,
+      "upper-abdominals": 70,
+      "lower-abdominals": 65
+    },
+    "instructions": [
+      "Stand sideways to cable machine",
+      "Hold weight at chest height",
+      "Press weight straight out, resisting rotation",
+      "Control weight back to chest"
+    ],
+    "difficulty": "intermediate",
+    "tags": ["anti-rotation", "stability", "functional"]
   }
 }

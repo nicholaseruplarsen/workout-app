@@ -1,6 +1,11 @@
+// src/utils/muscleActivations.ts
 import type { SavedExercise } from '@/types/exercise';
 
-// src/utils/muscleActivations.ts
+interface MuscleActivation {
+  value: number;
+  isOverloaded: boolean;
+}
+
 export const muscleGroups = [
   'neck', 'feet', 'groin', 'upper-trapezius', 'gastrocnemius',
   'tibialis', 'soleus', 'outer-quadricep', 'rectus-femoris',
@@ -18,19 +23,22 @@ export function initializeMuscleActivations() {
 }
 
 export function calculateMuscleActivations(exercises: SavedExercise[]) {
-  const activations = initializeMuscleActivations();
+  const rawActivations = initializeMuscleActivations();
 
   exercises.forEach(exercise => {
     Object.entries(exercise.muscleActivations).forEach(([muscle, activation]) => {
-      // Add the activation values together instead of taking the maximum
-      activations[muscle] = (activations[muscle] || 0) + activation;
-      
-      // Cap the maximum activation at 100%
-      activations[muscle] = Math.min(activations[muscle], 100);
+      rawActivations[muscle] = (rawActivations[muscle] || 0) + activation;
     });
   });
 
-  return activations;
+  // Convert to enhanced activations with overload status
+  return Object.entries(rawActivations).reduce((acc, [muscle, value]) => {
+    acc[muscle] = {
+      value: Math.min(value, 100),
+      isOverloaded: value > 100
+    };
+    return acc;
+  }, {} as Record<string, MuscleActivation>);
 }
 
 export function getActivationColor(activation: number) {

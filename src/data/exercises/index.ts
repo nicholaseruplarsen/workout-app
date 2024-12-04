@@ -7,6 +7,17 @@ import rawBackExercises from './back.json';
 import rawCoreExercises from './core.json';
 import { Category, Difficulty, Equipment } from '@/lib/constants';
 
+interface RawExercise {
+  id: string;
+  name: string;
+  category: string;
+  equipment?: string[];
+  muscleActivations: Record<string, number>;
+  instructions: string[];
+  difficulty: string;
+  tags?: string[];
+}
+
 // Type guard functions
 function isValidCategory(category: string): category is Category {
   return ['arms', 'legs', 'chest', 'back', 'core'].includes(category);
@@ -21,7 +32,7 @@ function isValidEquipment(equipment: string): equipment is Equipment {
 }
 
 // Validate and transform exercise data
-function validateExercise(exercise: any, id: string): Exercise {
+function validateExercise(exercise: RawExercise, id: string): Exercise {
   if (!isValidCategory(exercise.category)) {
     throw new Error(`Invalid category for exercise ${id}`);
   }
@@ -41,7 +52,7 @@ function validateExercise(exercise: any, id: string): Exercise {
   return exercise as Exercise;
 }
 
-function validateExerciseGroup(exercises: Record<string, any>): Record<string, Exercise> {
+function validateExerciseGroup(exercises: Record<string, RawExercise>): Record<string, Exercise> {
   const validated: Record<string, Exercise> = {};
   
   Object.entries(exercises).forEach(([id, exercise]) => {

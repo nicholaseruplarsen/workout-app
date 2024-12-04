@@ -5,7 +5,6 @@ import { useState, useRef } from 'react';
 import { Exercise } from '@/types/exercise';
 import { exerciseDatabase } from '@/data/exercises';
 import { Input } from '../common/Input';
-import { Button } from '../common/Button';
 import { normalizeExerciseName } from '@/utils/exercises';
 
 interface ExerciseSearchProps {

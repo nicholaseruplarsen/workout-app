@@ -37,3 +37,21 @@
 .slide-out {
   animation: slideOut 0.3s ease-in-out;
 }
+
+.muscle-overloaded {
+  animation: pulseOverload 2s infinite;
+}
+
+@keyframes pulseOverload {
+  0% { fill: #FF1A1A; }
+  50% { fill: #FF1A8C; }
+  100% { fill: #FF1A1A; }
+}
+
+/* Add base color classes */
+.muscle-activation-0 { fill: #EBEBEB; }
+.muscle-activation-20 { fill: #FFE5E5; }
+.muscle-activation-40 { fill: #FFB3B3; }
+.muscle-activation-60 { fill: #FF8080; }
+.muscle-activation-80 { fill: #FF4D4D; }
+.muscle-activation-100 { fill: #FF1A1A; }

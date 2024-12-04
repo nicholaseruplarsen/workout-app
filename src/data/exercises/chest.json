@@ -38,5 +38,44 @@
     ],
     "difficulty": "beginner",
     "tags": ["compound", "bodyweight", "strength"]
+  },
+  "incline-dumbbell-press": {
+    "id": "incline-dumbbell-press",
+    "name": "Incline Dumbbell Press",
+    "category": "chest",
+    "equipment": ["dumbbells"],
+    "muscleActivations": {
+      "upper-pectoralis": 95,
+      "mid-lower-pectoralis": 70,
+      "anterior-deltoid": 65,
+      "triceps": 50
+    },
+    "instructions": [
+      "Lie on incline bench set to 30-45 degrees",
+      "Press dumbbells up with controlled motion",
+      "Lower weights until slight chest stretch",
+      "Keep shoulders back and stable"
+    ],
+    "difficulty": "intermediate",
+    "tags": ["compound", "push"]
+  },
+  "cable-flyes": {
+    "id": "cable-flyes",
+    "name": "Cable Flyes",
+    "category": "chest",
+    "equipment": ["cable"],
+    "muscleActivations": {
+      "upper-pectoralis": 85,
+      "mid-lower-pectoralis": 90,
+      "anterior-deltoid": 40
+    },
+    "instructions": [
+      "Stand between cable machines, arms extended",
+      "Slight bend in elbows throughout movement",
+      "Bring handles together in hugging motion",
+      "Control weight back with chest stretch"
+    ],
+    "difficulty": "intermediate",
+    "tags": ["isolation", "peak contraction"]
   }
 }

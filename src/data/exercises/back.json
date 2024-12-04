@@ -38,5 +38,45 @@
     ],
     "difficulty": "intermediate",
     "tags": ["compound", "strength"]
+  },
+  "pull-ups": {
+    "id": "pull-ups",
+    "name": "Pull-Ups",
+    "category": "back",
+    "equipment": ["bodyweight"],
+    "muscleActivations": {
+      "latissimus": 95,
+      "upper-trapezius": 60,
+      "rhomboids": 70,
+      "biceps": 60
+    },
+    "instructions": [
+      "Hang from pull-up bar with overhand grip",
+      "Pull body up until chin over bar",
+      "Focus on driving elbows down and back",
+      "Lower with control to dead hang"
+    ],
+    "difficulty": "intermediate",
+    "tags": ["compound", "bodyweight", "vertical pull"]
+  },
+  "face-pulls": {
+    "id": "face-pulls",
+    "name": "Face Pulls",
+    "category": "back",
+    "equipment": ["cable"],
+    "muscleActivations": {
+      "upper-trapezius": 85,
+      "rhomboids": 90,
+      "posterior-deltoid": 85,
+      "lateral-deltoid": 40
+    },
+    "instructions": [
+      "Set cable at head height with rope attachment",
+      "Pull rope toward face, separating ends",
+      "Focus on external rotation at end",
+      "Control weight back to start"
+    ],
+    "difficulty": "beginner",
+    "tags": ["isolation", "posture", "rear delts"]
   }
 }

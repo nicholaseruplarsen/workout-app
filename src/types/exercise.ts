@@ -17,3 +17,8 @@ export interface SavedExercise extends Exercise {
   completed: boolean;
   dateAdded: string;
 }
+
+export interface MuscleActivation {
+  value: number;
+  isOverloaded: boolean;
+}

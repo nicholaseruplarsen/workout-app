@@ -17,5 +17,63 @@
     ],
     "difficulty": "beginner",
     "tags": ["isolation", "strength"]
+  },
+  "hammer-curls": {
+    "id": "hammer-curls",
+    "name": "Hammer Curls",
+    "category": "arms",
+    "equipment": ["dumbbells"],
+    "muscleActivations": {
+      "long-head-bicep": 85,
+      "short-head-bicep": 80,
+      "wrist-flexors": 40,
+      "wrist-extensors": 20
+    },
+    "instructions": [
+      "Stand with dumbbells at sides, palms facing each other",
+      "Keep elbows close to body throughout movement",
+      "Curl weights up while maintaining neutral grip",
+      "Lower with control to starting position"
+    ],
+    "difficulty": "beginner",
+    "tags": ["isolation", "strength", "brachialis"]
+  },
+  "tricep-pushdowns": {
+    "id": "tricep-pushdowns",
+    "name": "Tricep Pushdowns",
+    "category": "arms",
+    "equipment": ["cable"],
+    "muscleActivations": {
+      "triceps": 95,
+      "anterior-deltoid": 15,
+      "wrist-extensors": 25
+    },
+    "instructions": [
+      "Stand facing cable machine, grip bar at chest height",
+      "Keep elbows tucked to sides",
+      "Push bar down until arms fully extended",
+      "Control weight back to starting position"
+    ],
+    "difficulty": "beginner",
+    "tags": ["isolation", "push"]
+  },
+  "preacher-curls": {
+    "id": "preacher-curls",
+    "name": "Preacher Curls",
+    "category": "arms",
+    "equipment": ["dumbbells", "barbell"],
+    "muscleActivations": {
+      "short-head-bicep": 95,
+      "long-head-bicep": 75,
+      "wrist-flexors": 30
+    },
+    "instructions": [
+      "Sit at preacher bench with armpits against top pad",
+      "Hold weight with full extension",
+      "Curl weight up with controlled motion",
+      "Lower weight slowly to full extension"
+    ],
+    "difficulty": "intermediate",
+    "tags": ["isolation", "peak contraction"]
   }
 }

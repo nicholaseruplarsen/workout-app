@@ -39,5 +39,46 @@
     ],
     "difficulty": "beginner",
     "tags": ["compound", "unilateral", "balance"]
+  },
+  "romanian-deadlift": {
+    "id": "romanian-deadlift",
+    "name": "Romanian Deadlift",
+    "category": "legs",
+    "equipment": ["barbell", "dumbbells"],
+    "muscleActivations": {
+      "hamstrings": 95,
+      "glutes": 85,
+      "lower-back": 70,
+      "upper-trapezius": 40
+    },
+    "instructions": [
+      "Stand with weight, slight knee bend",
+      "Hinge at hips, pushing butt back",
+      "Lower weight along thighs until hamstring stretch",
+      "Drive hips forward to return to start"
+    ],
+    "difficulty": "intermediate",
+    "tags": ["compound", "hinge", "posterior chain"]
+  },
+  "leg-press": {
+    "id": "leg-press",
+    "name": "Leg Press",
+    "category": "legs",
+    "equipment": ["machine"],
+    "muscleActivations": {
+      "outer-quadricep": 90,
+      "rectus-femoris": 95,
+      "inner-quadricep": 85,
+      "glutes": 70
+    },
+    "instructions": [
+      "Sit in leg press with feet shoulder-width",
+      "Lower weight until knees reach 90 degrees",
+      "Press through whole foot to extend legs",
+      "Don't lock knees at top"
+    ],
+    "difficulty": "beginner",
+    "tags": ["compound", "machine", "quad focus"]
   }
+  
 }
