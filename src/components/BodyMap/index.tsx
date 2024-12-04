@@ -54,19 +54,23 @@ export default function BodyMap({ svgContent }: BodyMapProps) {
   return (
     <div className="flex flex-col items-center min-h-screen p-4">
       <ExerciseSearch onExerciseAdd={handleExerciseAdd} />
-
-      <div className="flex flex-col md:flex-row gap-8 w-full max-w-6xl">
-        <MuscleMap
-          svgContent={svgContent}
-          muscleActivations={muscleActivations}
-        />
-
-        {savedExercises.length > 0 && (
-          <ExerciseList
-            exercises={savedExercises}
-            onToggle={toggleExercise}
-            onRemove={removeExercise}
+    
+      {/* Modified container */}
+      <div className="relative w-full max-w-6xl">
+        <div className="flex justify-center">
+          <MuscleMap
+            svgContent={svgContent}
+            muscleActivations={muscleActivations}
           />
+        </div>
+    
+        {savedExercises.length > 0 && (
+          <div className="absolute top-0 right-0 w-80">
+            <ExerciseList
+              exercises={savedExercises}
+              onRemove={removeExercise}
+            />
+          </div>
         )}
       </div>
     </div>

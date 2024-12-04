@@ -1,6 +1,7 @@
 /* src/components/BodyMap/styles.css */
 .bodymap-container {
   visibility: hidden;
+  flex: 1;
 }
 
 .bodymap-container.ready {
@@ -8,23 +9,30 @@
   animation: fadeIn 0.3s ease-in-out;
 }
 
-.bodymap path { 
-  transition: all 0.2s ease-in-out;
+.bodymap-container {
+  visibility: hidden;
+  flex: 1;
+  max-width: 600px; /* Or your desired width */
+  margin: 0 auto;
 }
 
-.bodymap g[id] path:not([fill="none"]) { 
-  fill: #EBEBEB;
+.bodymap-container svg {
+  width: 100%;
+  height: auto;
+  max-height: 650px; /* Match your desired height */
+  aspect-ratio: 676.49 / 1203.49; /* Maintain aspect ratio */
 }
 
 .muscle-tooltip {
-  position: absolute;
+  position: fixed;
   background-color: rgba(0, 0, 0, 0.8);
   color: white;
   padding: 8px 12px;
   border-radius: 6px;
   font-size: 14px;
   pointer-events: none;
-  transform: translate(-50%, -100%);
+  transform: translate(0, -100%);
   margin-top: -12px;
   z-index: 1000;
+  white-space: nowrap;
 }

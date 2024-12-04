@@ -6,13 +6,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 interface ExerciseListProps {
   exercises: SavedExercise[];
-  onToggle: (id: string) => void;
   onRemove: (id: string) => void;
 }
 
-export function ExerciseList({ exercises, onToggle, onRemove }: ExerciseListProps) {
+export function ExerciseList({ exercises, onRemove }: ExerciseListProps) {
   return (
-    <div className="flex-1 bg-gray-900 p-4 rounded-lg">
+    <div className="bg-gray-900/80 backdrop-blur-sm p-4 rounded-lg">
       <h2 className="text-lg font-semibold mb-4 text-white">Saved Exercises</h2>
       <AnimatePresence>
         {exercises.map((exercise) => (
@@ -21,17 +20,9 @@ export function ExerciseList({ exercises, onToggle, onRemove }: ExerciseListProp
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, x: -100 }}
-            className="flex items-center gap-2 bg-gray-800 p-2 rounded mb-2"
+            className="flex items-center gap-2 bg-gray-800/90 p-2 rounded mb-2"
           >
-            <input
-              type="checkbox"
-              checked={exercise.completed}
-              onChange={() => onToggle(exercise.id)}
-              className="w-5 h-5 accent-mw-red-500"
-            />
-            <span className={`text-white ${exercise.completed ? 'line-through' : ''}`}>
-              {exercise.name}
-            </span>
+            <span className="text-white">{exercise.name}</span>
             <button
               onClick={() => onRemove(exercise.id)}
               className="ml-auto text-gray-400 hover:text-mw-red-500"
