@@ -19,6 +19,7 @@ interface BodyMapProps {
 
 export default function BodyMap({ svgContent }: BodyMapProps) {
   const [muscleActivations, setMuscleActivations] = useState<Record<string, number>>({});
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     // Initialize random activations
@@ -40,6 +41,20 @@ export default function BodyMap({ svgContent }: BodyMapProps) {
   return (
     <div className="flex items-center justify-center min-h-screen w-full">
       <style jsx global>{`
+        .bodymap-container {
+          visibility: hidden;
+        }
+        
+        .bodymap-container.ready {
+          visibility: visible;
+          animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
         .bodymap path { 
           transition: all 0.2s ease-in-out;
         }
@@ -70,11 +85,12 @@ export default function BodyMap({ svgContent }: BodyMapProps) {
           z-index: 1000;
         }
       `}</style>
-      <div className="w-full max-w-2xl">
+      <div className={`w-full max-w-2xl bodymap-container ${isReady ? 'ready' : ''}`}>
         <MuscleSvg 
           className="w-full h-auto preserve-aspect-ratio bodymap"
           svgContent={svgContent}
           muscleActivations={muscleActivations}
+          onReady={() => setIsReady(true)}
         />
       </div>
     </div>

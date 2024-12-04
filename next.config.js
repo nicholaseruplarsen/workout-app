@@ -6,5 +6,9 @@ module.exports = {
       use: ['@svgr/webpack']
     });
     return config;
+  },
+  // Add this line to disable the static indicator
+  devIndicators: {
+    appIsrStatus: false
   }
 };
