@@ -3,6 +3,8 @@
 
 import { useState } from 'react';
 import { MuscleSvg } from './MuscleSvg';
+import { Exercise } from '@/types/exercise';
+import { exerciseDatabase } from '@/data/exercises';
 
 const muscleGroups = [
   'neck', 'feet', 'groin', 'upper-trapezius', 'gastrocnemius',
@@ -13,19 +15,9 @@ const muscleGroups = [
   'anterior-deltoid', 'lateral-deltoid', 'hands'
 ];
 
-// Exercise database
-const exerciseDatabase: Record<string, Record<string, number>> = {
-  'bicep curls': {
-    'long-head-bicep': 90,
-    'short-head-bicep': 85,
-    'wrist-flexors': 30,
-  },
-  // Add more exercises as needed
-};
-
-interface SavedExercise {
-  name: string;
+interface SavedExercise extends Exercise {
   completed: boolean;
+  dateAdded: string;
 }
 
 export default function BodyMap({ svgContent }: { svgContent: string }) {
@@ -41,45 +33,60 @@ export default function BodyMap({ svgContent }: { svgContent: string }) {
   const [exerciseInput, setExerciseInput] = useState('');
   const [savedExercises, setSavedExercises] = useState<SavedExercise[]>([]);
 
+  const updateMuscleActivations = (exercises: SavedExercise[]) => {
+    // Reset all muscle activations
+    const newActivations = muscleGroups.reduce((acc, muscle) => {
+      acc[muscle] = 0;
+      return acc;
+    }, {} as Record<string, number>);
+  
+    // Combine activations from all exercises
+    exercises.forEach(exercise => {
+      Object.entries(exercise.muscleActivations).forEach(([muscle, activation]) => {
+        // Take the maximum activation value for each muscle
+        newActivations[muscle] = Math.max(
+          newActivations[muscle] || 0,
+          activation
+        );
+      });
+    });
+  
+    setMuscleActivations(newActivations);
+  };
+  
+  // Update the handleExerciseSubmit function
   const handleExerciseSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const normalizedInput = exerciseInput.toLowerCase().trim();
     
     if (normalizedInput && exerciseDatabase[normalizedInput]) {
-      // Update muscle activations
-      setMuscleActivations(prev => ({
-        ...muscleGroups.reduce((acc, muscle) => {
-          acc[muscle] = 0;
-          return acc;
-        }, {} as Record<string, number>),
-        ...exerciseDatabase[normalizedInput]
-      }));
-
+      const exercise = exerciseDatabase[normalizedInput];
+      
       // Add to saved exercises
-      setSavedExercises(prev => [...prev, {
-        name: exerciseInput.trim(),
-        completed: false
-      }]);
-
+      const updatedExercises = [...savedExercises, {
+        ...exercise,
+        completed: false,
+        dateAdded: new Date().toISOString()
+      }];
+      
+      setSavedExercises(updatedExercises);
+      // Update muscle activations based on all exercises
+      updateMuscleActivations(updatedExercises);
       setExerciseInput('');
     }
+  };
+  
+  // Also update the removeExercise function
+  const removeExercise = (index: number) => {
+    const updatedExercises = savedExercises.filter((_, i) => i !== index);
+    setSavedExercises(updatedExercises);
+    updateMuscleActivations(updatedExercises);
   };
 
   const toggleExercise = (index: number) => {
     setSavedExercises(prev => prev.map((ex, i) => 
       i === index ? { ...ex, completed: !ex.completed } : ex
     ));
-  };
-
-  const removeExercise = (index: number) => {
-    setSavedExercises(prev => prev.filter((_, i) => i !== index));
-    if (savedExercises.length === 1) {
-      // Reset all muscle activations to 0 when removing the last exercise
-      setMuscleActivations(muscleGroups.reduce((acc, muscle) => {
-        acc[muscle] = 0;
-        return acc;
-      }, {} as Record<string, number>));
-    }
   };
 
   const getActivationColor = (activation: number) => {
@@ -91,6 +98,45 @@ export default function BodyMap({ svgContent }: { svgContent: string }) {
     return '#FFE5E5';
   };
 
+  const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+  
+  // Add this function to handle keyboard events
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    const matchingExercises = Object.values(exerciseDatabase).filter((exercise: Exercise) =>
+      exercise.name.toLowerCase().includes(exerciseInput.toLowerCase()) ||
+      (exercise.tags ?? []).some(tag => tag.toLowerCase().includes(exerciseInput.toLowerCase()))
+    );
+  
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        setSelectedIndex(prev => 
+          prev < matchingExercises.length - 1 ? prev + 1 : prev
+        );
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        setSelectedIndex(prev => prev > 0 ? prev - 1 : prev);
+        break;
+      case 'Enter':
+        e.preventDefault();
+        if (selectedIndex >= 0 && matchingExercises[selectedIndex]) {
+          const exercise = matchingExercises[selectedIndex];
+          setExerciseInput('');
+          setSelectedIndex(-1);
+            const updatedExercises = [...savedExercises, {
+              ...exercise,
+              completed: false,
+              dateAdded: new Date().toISOString()
+            }];
+            setSavedExercises(updatedExercises);
+            updateMuscleActivations(updatedExercises);
+          }
+          break;
+    }
+  };
+  
+
   return (
     <div className="flex flex-col items-center min-h-screen p-4">
       <form onSubmit={handleExerciseSubmit} className="w-full max-w-md mb-8">
@@ -98,18 +144,64 @@ export default function BodyMap({ svgContent }: { svgContent: string }) {
           <input
             type="text"
             value={exerciseInput}
-            onChange={(e) => setExerciseInput(e.target.value)}
+            onChange={(e) => {
+              setExerciseInput(e.target.value);
+              setSelectedIndex(-1); // Reset selection when input changes
+            }}
+            onKeyDown={handleKeyDown}
             placeholder="Enter exercise (e.g. bicep curls)"
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-mw-red-500 focus:border-transparent"
+            className="w-full px-4 py-2 bg-gray-900/50 border border-gray-700 rounded-lg 
+                       text-white placeholder-gray-400 
+                       focus:ring-2 focus:ring-mw-red-500 focus:border-transparent
+                       transition-colors"
           />
+          {exerciseInput.length > 0 && (
+            <div className="absolute z-10 w-full mt-1 bg-gray-900 border border-gray-700 rounded-lg 
+                            shadow-lg max-h-60 overflow-y-auto">
+              {Object.values(exerciseDatabase)
+                .filter((exercise: Exercise) => 
+                  exercise.name.toLowerCase().includes(exerciseInput.toLowerCase()) ||
+                  (exercise.tags ?? []).some(tag => tag.toLowerCase().includes(exerciseInput.toLowerCase()))
+                )
+                .map((exercise: Exercise, index: number) => (
+                  <button
+                    key={exercise.id}
+                    onClick={() => {
+                      setExerciseInput('');
+                      setSelectedIndex(-1);
+                          const updatedExercises = [...savedExercises, {
+                            ...exercise,
+                            completed: false,
+                            dateAdded: new Date().toISOString()
+                          }];
+                          setSavedExercises(updatedExercises);
+                          updateMuscleActivations(updatedExercises);
+                        }}
+                        className={`w-full px-4 py-2 text-left text-white 
+                                   ${index === selectedIndex ? 'bg-gray-800' : 'hover:bg-gray-800'}
+                                   transition-colors cursor-pointer`}
+                      >
+                    <div className="font-medium">{exercise.name}</div>
+                    {exercise.tags && (
+                      <div className="text-sm text-gray-400">
+                        {exercise.tags.join(', ')}
+                      </div>
+                    )}
+                  </button>
+                ))}
+            </div>
+          )}
           <button
             type="submit"
-            className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-1 bg-mw-red-500 text-white rounded-md hover:bg-mw-red-700 transition-colors"
+            className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-1 
+                       bg-mw-red-500 text-white rounded-md hover:bg-mw-red-700 
+                       transition-colors"
           >
             Add
           </button>
         </div>
       </form>
+      
 
       <div className="flex flex-col md:flex-row gap-8 w-full max-w-6xl">
         <div className="flex-1">

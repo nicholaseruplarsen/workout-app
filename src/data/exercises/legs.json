@@ -1,0 +1,43 @@
+{
+  "squats": {
+    "id": "squats",
+    "name": "Squats",
+    "category": "legs",
+    "equipment": ["barbell", "bodyweight"],
+    "muscleActivations": {
+      "outer-quadricep": 85,
+      "rectus-femoris": 90,
+      "inner-quadricep": 85,
+      "inner-thigh": 50,
+      "gastrocnemius": 40
+    },
+    "instructions": [
+      "Stand with feet shoulder-width apart",
+      "Lower body by bending knees and hips",
+      "Keep chest up and back straight",
+      "Return to standing position"
+    ],
+    "difficulty": "intermediate",
+    "tags": ["compound", "strength", "powerlifting"]
+  },
+  "lunges": {
+    "id": "lunges",
+    "name": "Lunges",
+    "category": "legs",
+    "equipment": ["bodyweight", "dumbbells"],
+    "muscleActivations": {
+      "outer-quadricep": 80,
+      "rectus-femoris": 85,
+      "inner-quadricep": 75,
+      "gastrocnemius": 45
+    },
+    "instructions": [
+      "Stand with feet hip-width apart",
+      "Step forward with one leg",
+      "Lower back knee toward ground",
+      "Push back to starting position"
+    ],
+    "difficulty": "beginner",
+    "tags": ["compound", "unilateral", "balance"]
+  }
+}

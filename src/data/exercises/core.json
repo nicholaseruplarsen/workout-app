@@ -1,0 +1,40 @@
+{
+  "plank": {
+    "id": "plank",
+    "name": "Plank",
+    "category": "core",
+    "equipment": ["bodyweight"],
+    "muscleActivations": {
+      "upper-abdominals": 75,
+      "lower-abdominals": 80,
+      "obliques": 60
+    },
+    "instructions": [
+      "Start in forearm plank position",
+      "Keep body in straight line from head to heels",
+      "Engage core and hold position",
+      "Maintain normal breathing throughout"
+    ],
+    "difficulty": "beginner",
+    "tags": ["isometric", "stability", "bodyweight"]
+  },
+  "crunches": {
+    "id": "crunches",
+    "name": "Crunches",
+    "category": "core",
+    "equipment": ["bodyweight"],
+    "muscleActivations": {
+      "upper-abdominals": 90,
+      "lower-abdominals": 70,
+      "obliques": 40
+    },
+    "instructions": [
+      "Lie on back with knees bent",
+      "Place hands behind head",
+      "Lift shoulder blades off ground",
+      "Lower back down with control"
+    ],
+    "difficulty": "beginner",
+    "tags": ["isolation", "bodyweight"]
+  }
+}

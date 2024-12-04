@@ -1,6 +1,7 @@
 // src/types/exercise.ts
 import type { Category, Difficulty, Equipment } from '@/lib/constants';
 
+// src/types/exercise.ts
 export interface Exercise {
   id: string;
   name: string;

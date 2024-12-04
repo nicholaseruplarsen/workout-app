@@ -1,0 +1,42 @@
+{
+  "lat-pulldown": {
+    "id": "lat-pulldown",
+    "name": "Lat Pulldown",
+    "category": "back",
+    "equipment": ["cable"],
+    "muscleActivations": {
+      "latissimus": 90,
+      "upper-trapezius": 40,
+      "rhomboids": 50,
+      "biceps": 30
+    },
+    "instructions": [
+      "Sit at a lat pulldown machine with your thighs secured",
+      "Grasp the bar with a wide grip",
+      "Pull the bar down to your upper chest",
+      "Slowly return to the starting position"
+    ],
+    "difficulty": "beginner",
+    "tags": ["compound", "strength"]
+  },
+  "bent-over-row": {
+    "id": "bent-over-row",
+    "name": "Bent Over Row",
+    "category": "back",
+    "equipment": ["dumbbells", "barbell"],
+    "muscleActivations": {
+      "latissimus": 85,
+      "upper-trapezius": 45,
+      "rhomboids": 60,
+      "posterior-deltoid": 40
+    },
+    "instructions": [
+      "Bend at your hips keeping your back straight",
+      "Let weights hang at arms length",
+      "Pull weights to your lower chest",
+      "Lower weights back to starting position"
+    ],
+    "difficulty": "intermediate",
+    "tags": ["compound", "strength"]
+  }
+}

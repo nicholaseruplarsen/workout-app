@@ -1,0 +1,42 @@
+{
+  "bench-press": {
+    "id": "bench-press",
+    "name": "Bench Press",
+    "category": "chest",
+    "equipment": ["barbell", "dumbbells"],
+    "muscleActivations": {
+      "upper-pectoralis": 85,
+      "mid-lower-pectoralis": 90,
+      "anterior-deltoid": 60,
+      "triceps": 45
+    },
+    "instructions": [
+      "Lie on bench with feet flat on ground",
+      "Lower weight to chest level with control",
+      "Press weight up until arms are extended",
+      "Keep shoulders back and stable throughout"
+    ],
+    "difficulty": "intermediate",
+    "tags": ["compound", "strength", "powerlifting"]
+  },
+  "push-ups": {
+    "id": "push-ups",
+    "name": "Push-Ups",
+    "category": "chest",
+    "equipment": ["bodyweight"],
+    "muscleActivations": {
+      "upper-pectoralis": 80,
+      "mid-lower-pectoralis": 85,
+      "anterior-deltoid": 55,
+      "triceps": 50
+    },
+    "instructions": [
+      "Start in plank position with hands shoulder-width apart",
+      "Lower body until chest nearly touches ground",
+      "Push body back up to starting position",
+      "Keep core tight and body straight throughout"
+    ],
+    "difficulty": "beginner",
+    "tags": ["compound", "bodyweight", "strength"]
+  }
+}
