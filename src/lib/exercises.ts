@@ -56,6 +56,7 @@ export async function findOptimalWorkout(
     totalActivations: {}
   };
   let bestScore = Number.MAX_VALUE;
+  let combinationsChecked = 0;
 
   function calculateTotalActivations(exercises: Exercise[]): Record<string, number> {
     const totals: Record<string, number> = {};
@@ -82,26 +83,26 @@ export async function findOptimalWorkout(
   }
 
   const startTime = Date.now();
-  let combinationsChecked = 0;
-  const MAX_TIME = 3000; // 3 seconds
+  const MAX_TIME = 3000;
+  const PROGRESS_INTERVAL = 100; // Show progress every 100ms
+
+  let lastProgressTime = startTime;
 
   async function findCombination(current: Exercise[], index: number) {
-    const currentTime = Date.now() - startTime;
-    if (currentTime >= MAX_TIME) {
+    const currentTime = Date.now();
+    
+    // Only show progress periodically to avoid slowing down the search
+    if (onProgress && currentTime - lastProgressTime >= PROGRESS_INTERVAL) {
+      onProgress([...current]);
+      lastProgressTime = currentTime;
+      await new Promise(resolve => setTimeout(resolve, 5)); // Minimal delay
+    }
+
+    if (currentTime - startTime >= MAX_TIME) {
       return;
     }
 
     combinationsChecked++;
-    
-    if (onProgress && current.length > 0) {
-      // Show progress of current combination being tested
-      onProgress([...current]);
-      // Delay based on remaining time and estimated remaining combinations
-      const remainingTime = MAX_TIME - currentTime;
-      const delay = Math.min(50, remainingTime / (allExercises.length - current.length));
-      await new Promise(resolve => setTimeout(resolve, delay));
-    }
-
     const activations = calculateTotalActivations(current);
     const score = calculateScore(activations);
 
@@ -111,31 +112,26 @@ export async function findOptimalWorkout(
         exercises: [...current],
         totalActivations: {...activations}
       };
-      // Show when we find a better solution
-      if (onProgress) {
-        onProgress([...current]);
-      }
     }
 
     if (current.length >= 6 || score < 100) return;
 
-    // Try adding exercises from different categories to ensure variety
-    const categoriesSeen = new Set(current.map(ex => ex.category));
-    
+    // Try all possible next exercises
     for (let i = index; i < allExercises.length; i++) {
-      const nextExercise = allExercises[i];
-      if (!categoriesSeen.has(nextExercise.category) || current.length < 3) {
-        await findCombination([...current, nextExercise], i + 1);
-      }
+      await findCombination([...current, allExercises[i]], i + 1);
     }
   }
 
+  // First run the algorithm without animation to find the true optimal solution
   await findCombination([], 0);
-  
-  // Ensure final best solution is shown in progress
+
+  // Then show a quick animation of the path to the optimal solution
   if (onProgress) {
-    onProgress(bestSolution.exercises);
+    for (let i = 1; i <= bestSolution.exercises.length; i++) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+      onProgress(bestSolution.exercises.slice(0, i));
+    }
   }
-  
+
   return bestSolution;
 }
