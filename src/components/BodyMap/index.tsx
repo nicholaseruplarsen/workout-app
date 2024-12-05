@@ -49,21 +49,32 @@ export default function BodyMap({ svgContent }: BodyMapProps) {
     setTimeout(() => setCanOpenSearch(true), 100);
   };
 
-  const handleOptimalWorkout = () => {
+  const handleOptimalWorkout = async () => {
     setIsOptimizing(true);
     setCurrentCombination([]);
   
-    const result = findOptimalWorkout((combination) => {
-      setCurrentCombination([...combination]);
-    });
+    try {
+      const result = await findOptimalWorkout((combination) => {
+        setCurrentCombination([...combination]);
+      });
   
-    // Wait for all combinations to be shown before adding exercises
-    setTimeout(() => {
+      // Small delay before adding exercises to ensure animation is visible
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Clear previous exercises
+      savedExercises.forEach(exercise => {
+        removeExercise(exercise.id);
+      });
+  
+      // Add new exercises
       result.exercises.forEach(exercise => {
         addExercise(exercise);
       });
+    } catch (error) {
+      console.error('Optimization failed:', error);
+    } finally {
       setIsOptimizing(false);
-    }, 2000);
+    }
   };
 
   return (
