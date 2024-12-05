@@ -56,7 +56,6 @@ export async function findOptimalWorkout(
     totalActivations: {}
   };
   let bestScore = Number.MAX_VALUE;
-  let combinationsChecked = 0;
 
   function calculateTotalActivations(exercises: Exercise[]): Record<string, number> {
     const totals: Record<string, number> = {};
@@ -102,7 +101,6 @@ export async function findOptimalWorkout(
       return;
     }
 
-    combinationsChecked++;
     const activations = calculateTotalActivations(current);
     const score = calculateScore(activations);
 
