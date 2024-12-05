@@ -1,6 +1,7 @@
 // src/components/BodyMap/index.tsx
 'use client';
 
+import './styles.css';
 import { Exercise } from '@/types/exercise';
 import { ExerciseSearch } from './ExerciseSearch';
 import { MuscleMap } from './MuscleMap';
@@ -8,7 +9,7 @@ import { ExerciseList } from './ExerciseList';
 import { useExercises } from '@/hooks/useExercises';
 import { useMuscleActivations } from '@/hooks/useMuscleActivations';
 import { useEffect, useState } from 'react';
-import './styles.css';
+import { findOptimalWorkout } from '@/lib/exercises';
 
 interface BodyMapProps {
   svgContent: string;
@@ -45,8 +46,22 @@ export default function BodyMap({ svgContent }: BodyMapProps) {
     setTimeout(() => setCanOpenSearch(true), 100);
   };
 
+  const handleOptimalWorkout = () => {
+    const { exercises } = findOptimalWorkout();
+    exercises.forEach(exercise => {
+      addExercise(exercise);
+    });
+  };
+
   return (
     <div className="flex flex-col items-center min-h-screen p-4">
+      <button
+        onClick={handleOptimalWorkout}
+        className="fixed top-4 left-4 px-4 py-2 bg-transparent border border-white rounded-md text-white hover:bg-white/10 transition-colors"
+      >
+        Generate Optimal Workout
+      </button>
+  
       <ExerciseSearch onExerciseAdd={handleExerciseAdd} />
     
       {/* Modified container */}
