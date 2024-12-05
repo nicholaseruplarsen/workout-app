@@ -12,6 +12,9 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
         'mw-gray': '#EBEBEB',
+        'mw-purple': {
+          '500': '#8B5CF6'
+        },
         'mw-red': {
           '100': '#FFE5E5',
           '200': '#FFB3B3',

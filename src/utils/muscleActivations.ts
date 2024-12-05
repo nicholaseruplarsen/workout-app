@@ -34,7 +34,7 @@ export function calculateMuscleActivations(exercises: SavedExercise[]) {
   // Convert to enhanced activations with overload status
   return Object.entries(rawActivations).reduce((acc, [muscle, value]) => {
     acc[muscle] = {
-      value: Math.min(value, 100),
+      value,
       isOverloaded: value > 100
     };
     return acc;
@@ -43,6 +43,7 @@ export function calculateMuscleActivations(exercises: SavedExercise[]) {
 
 export function getActivationColor(activation: number) {
   if (activation === 0) return '#EBEBEB';
+  if (activation >= 120) return '#ff187f';
   if (activation >= 80) return '#FF1A1A';
   if (activation >= 60) return '#FF4D4D';
   if (activation >= 40) return '#FF8080';

@@ -28,7 +28,6 @@ export function MuscleMap({ svgContent, muscleActivations }: MuscleMapProps) {
     const width = (900 * 676.49) / 1203.49;
     svgElement.setAttribute('width', width.toString());
     
-    // Inside useEffect
     Object.entries(muscleActivations).forEach(([muscleId, activation]) => {
       const group = svgElement.getElementById(muscleId);
       if (group) {
@@ -36,11 +35,6 @@ export function MuscleMap({ svgContent, muscleActivations }: MuscleMapProps) {
         Array.from(paths).forEach(path => {
           if (path.getAttribute('fill') !== 'none') {
             path.setAttribute('fill', getActivationColor(activation.value));
-            if (activation.isOverloaded) {
-              path.classList.add('muscle-overloaded');
-            } else {
-              path.classList.remove('muscle-overloaded');
-            }
           }
         });
       }
