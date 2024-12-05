@@ -22,6 +22,7 @@ export default function BodyMap({ svgContent }: BodyMapProps) {
   const [canOpenSearch, setCanOpenSearch] = useState(true);
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [currentCombination, setCurrentCombination] = useState<Exercise[]>([]);
+  const [isOptimal, setIsOptimal] = useState(false);
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -52,21 +53,33 @@ export default function BodyMap({ svgContent }: BodyMapProps) {
   const handleOptimalWorkout = async () => {
     setIsOptimizing(true);
     setCurrentCombination([]);
+    setIsOptimal(false);
   
     try {
       const result = await findOptimalWorkout((combination) => {
         setCurrentCombination([...combination]);
       });
   
-      // Small delay before adding exercises to ensure animation is visible
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Set the final combination
+      setCurrentCombination([...result.exercises]);
       
-      // Clear previous exercises
+      // Wait for all exercise animations to complete
+      // Assuming 0.1s delay per exercise from OptimizationProgress
+      await new Promise(resolve => 
+        setTimeout(resolve, result.exercises.length * 100)
+      );
+  
+      // Now show the glow effect
+      setIsOptimal(true);
+  
+      // Wait for glow animation to complete
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      // Clear previous exercises and add new ones
       savedExercises.forEach(exercise => {
         removeExercise(exercise.id);
       });
   
-      // Add new exercises
       result.exercises.forEach(exercise => {
         addExercise(exercise);
       });
@@ -74,6 +87,8 @@ export default function BodyMap({ svgContent }: BodyMapProps) {
       console.error('Optimization failed:', error);
     } finally {
       setIsOptimizing(false);
+      setIsOptimal(false);
+      setCurrentCombination([]);
     }
   };
 
@@ -90,6 +105,7 @@ export default function BodyMap({ svgContent }: BodyMapProps) {
       <OptimizationProgress 
         combination={currentCombination}
         isOptimizing={isOptimizing}
+        isOptimal={isOptimal}
       />
   
       <ExerciseSearch onExerciseAdd={handleExerciseAdd} />
