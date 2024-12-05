@@ -39,11 +39,12 @@ export function getExercisesByEquipment(equipment: Equipment): Exercise[] {
   );
 }
 
-export function findOptimalWorkout(): OptimalWorkoutResult {
+export function findOptimalWorkout(
+  onProgress?: (combination: Exercise[]) => void
+): OptimalWorkoutResult {
   const allExercises = Object.values(exerciseDatabase);
   const muscleTargets = new Set<string>();
   
-  // Collect all unique muscles
   allExercises.forEach(exercise => {
     Object.keys(exercise.muscleActivations).forEach(muscle => {
       muscleTargets.add(muscle);
@@ -56,7 +57,6 @@ export function findOptimalWorkout(): OptimalWorkoutResult {
   };
   let bestScore = Number.MAX_VALUE;
 
-  // Helper to calculate total activations
   function calculateTotalActivations(exercises: Exercise[]): Record<string, number> {
     const totals: Record<string, number> = {};
     exercises.forEach(exercise => {
@@ -67,23 +67,30 @@ export function findOptimalWorkout(): OptimalWorkoutResult {
     return totals;
   }
 
-  // Helper to calculate score (lower is better)
   function calculateScore(activations: Record<string, number>): number {
     let score = 0;
     muscleTargets.forEach(muscle => {
       const activation = activations[muscle] || 0;
       if (activation < 95) {
-        score += Math.pow(95 - activation, 2); // Penalize under-activation
+        score += Math.pow(95 - activation, 2);
       }
       if (activation > 105) {
-        score += Math.pow(activation - 105, 2); // Penalize over-activation
+        score += Math.pow(activation - 105, 2);
       }
     });
     return score;
   }
 
-  // Try different combinations of exercises
+  let combinationIndex = 0;
+
   function findCombination(current: Exercise[], index: number) {
+    if (onProgress && current.length > 0) {
+      setTimeout(() => {
+        onProgress(current);
+      }, combinationIndex * 500);
+      combinationIndex++;
+    }
+
     const activations = calculateTotalActivations(current);
     const score = calculateScore(activations);
 
@@ -95,7 +102,6 @@ export function findOptimalWorkout(): OptimalWorkoutResult {
       };
     }
 
-    // Stop if we have too many exercises or the score is good enough
     if (current.length >= 6 || score < 100) return;
 
     // Try adding each remaining exercise
@@ -105,6 +111,13 @@ export function findOptimalWorkout(): OptimalWorkoutResult {
   }
 
   findCombination([], 0);
+
+  // Force a minimum optimization display time
+  setTimeout(() => {
+    if (onProgress) {
+      onProgress(bestSolution.exercises);
+    }
+  }, combinationIndex * 200);
+
   return bestSolution;
 }
-

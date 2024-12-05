@@ -10,6 +10,7 @@ import { useExercises } from '@/hooks/useExercises';
 import { useMuscleActivations } from '@/hooks/useMuscleActivations';
 import { useEffect, useState } from 'react';
 import { findOptimalWorkout } from '@/lib/exercises';
+import { OptimizationProgress } from './OptimizationProgress'; 
 
 interface BodyMapProps {
   svgContent: string;
@@ -19,6 +20,8 @@ export default function BodyMap({ svgContent }: BodyMapProps) {
   const { savedExercises, addExercise, removeExercise } = useExercises();
   const muscleActivations = useMuscleActivations(savedExercises);
   const [canOpenSearch, setCanOpenSearch] = useState(true);
+  const [isOptimizing, setIsOptimizing] = useState(false);
+  const [currentCombination, setCurrentCombination] = useState<Exercise[]>([]);
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -47,20 +50,36 @@ export default function BodyMap({ svgContent }: BodyMapProps) {
   };
 
   const handleOptimalWorkout = () => {
-    const { exercises } = findOptimalWorkout();
-    exercises.forEach(exercise => {
-      addExercise(exercise);
+    setIsOptimizing(true);
+    setCurrentCombination([]);
+  
+    const result = findOptimalWorkout((combination) => {
+      setCurrentCombination([...combination]);
     });
+  
+    // Wait for all combinations to be shown before adding exercises
+    setTimeout(() => {
+      result.exercises.forEach(exercise => {
+        addExercise(exercise);
+      });
+      setIsOptimizing(false);
+    }, 2000);
   };
 
   return (
     <div className="flex flex-col items-center min-h-screen p-4">
       <button
         onClick={handleOptimalWorkout}
-        className="fixed top-4 left-4 px-4 py-2 bg-transparent border border-white rounded-md text-white hover:bg-white/10 transition-colors"
+        disabled={isOptimizing}
+        className="fixed top-4 left-4 px-4 py-2 bg-transparent border border-white rounded-md text-white hover:bg-white/10 transition-colors disabled:opacity-50"
       >
-        Generate Optimal Workout
+        {isOptimizing ? 'Optimizing...' : 'Generate Optimal Workout'}
       </button>
+  
+      <OptimizationProgress 
+        combination={currentCombination}
+        isOptimizing={isOptimizing}
+      />
   
       <ExerciseSearch onExerciseAdd={handleExerciseAdd} />
     
